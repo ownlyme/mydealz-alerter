@@ -18,3 +18,4 @@ Any mousclick will dismiss the notification, but a click with the middle button 
 
 
 ![screenshot](https://imgur.com/a/XRINjZi)
+![screenshot](https://i.imgur.com/FZrnjVW.png)

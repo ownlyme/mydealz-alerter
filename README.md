@@ -15,3 +15,6 @@ you can change the $sound to your liking. disabling the sound entirely is not im
 
 ### ADDITIONAL INFO
 Any mousclick will dismiss the notification, but a click with the middle button will take you to the deal's homepage
+
+
+![screenshot](https://imgur.com/a/XRINjZi)

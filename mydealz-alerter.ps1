@@ -3,7 +3,7 @@ add-type -assemblyName System.Drawing
 
 $searchwords = @("*playstore*","*saturn*","*jack & jones*") #not case sensitive
 
-$monitor = 2 #first screen         !!!!!!!!!!
+$monitor = 1 #first screen         !!!!!!!!!!
 $posX = 0
 $posY = 500
 $flowDirection = "down" # ("up" | "down")

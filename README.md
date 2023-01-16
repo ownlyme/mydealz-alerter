@@ -9,6 +9,7 @@ as an example i've set up the script with 3 searchwords already.
 
 also you might need to configure on what screen it will be shown. by default it's on the first screen.\
 you can fine-tune the position by additionally changing the $posX and $posY variables.\
+the $boxHeight and $boxWidth of the alerts is adjustable too.\
 the $flowDirection variable determines whether additional notifications will be shown below or above.\
 the $throttle variable determines how long the script will sleep in between queries (no idea if they ban your ip if you query the server too often)\
 you can change the $sound to your liking. disabling the sound entirely is not implemented, you'd need to delete line 148 for that.

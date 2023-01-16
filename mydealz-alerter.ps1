@@ -1,16 +1,20 @@
 add-type -assemblyName System.Windows.Forms
 add-type -assemblyName System.Drawing
 
-$searchwords = @("*playstore*","*saturn*","*jack & jones*") #not case sensitive
+$searchwords = @("*ryzen*","*galaxy tab*", "*mind*", "*amazon*") #not case sensitive
 
-$monitor = 1 #first screen         !!!!!!!!!!
+$monitor = 1 #first screen !!!!!!!!!!
 $posX = 0
-$posY = 500
-$flowDirection = "down" # ("up" | "down")
+$posY = 780
+$flowDirection = "up" # ("up" | "down")
 $throttle = 61 #seconds
 $sound = "C:\WINDOWS\Media\Windows Notify Calendar.wav"
 
-$checkedDeals = @()
+$boxWidth = 250
+$boxHeight = 125
+
+$newDeals = @()
+$shownDeals = @()
 
 function goForm
 {
@@ -21,7 +25,9 @@ function goForm
 	[string]$price,
 	[int]$windowX,
 	[int]$windowY,
-	[string]$link
+	[string]$link,
+	[int]$boxWidth,
+	[int]$boxHeight
 	)
 	[void][reflection.assembly]::LoadWithPartialName("System.Windows.Forms")
 
@@ -35,16 +41,18 @@ function goForm
 	$Font = New-Object System.Drawing.Font("Arial", 45, [System.Drawing.FontStyle]::Bold)
 	
 	$img = [System.Drawing.Image]::FromFile($file)
-	$scaleX = 200/$img.Width
-	$scaleY = 160/$img.Height
+	$targetImgSize = [int]($boxHeight*0.75)
+	$scaleX = $targetImgSize/$img.Width
+	$scaleY = $targetImgSize/$img.Height
 	$scale = [math]::min($scaleX,$scaleY)
 	$newX = $img.Width*$scale
 	$newY = $img.Height*$scale
 	
-    $bmp = New-Object System.Drawing.Bitmap(400, 200)
+    $bmp = New-Object System.Drawing.Bitmap($boxWidth, $boxHeight)
 
 	$p0 = New-Object System.Drawing.Point(0, 0)
-	$p1 = New-Object System.Drawing.Point(450, 40)
+	$p1 = New-Object System.Drawing.Point([int]($boxWidth*1.125), [int]($boxHeight*0.25))
+
 	$c1 = [System.Drawing.Color]::FromArgb(255, 0, 55, 0)
 	$c0 = [System.Drawing.Color]::FromArgb(255, 0, 0, 0)
 	$gradientBrush = New-Object System.Drawing.Drawing2D.LinearGradientBrush($p0, $p1, $c0, $c1)
@@ -52,20 +60,25 @@ function goForm
 	$graphics = [System.Drawing.Graphics]::FromImage($bmp)
 	$graphics.FillRectangle($gradientBrush, 0, 0, $bmp.Width, $bmp.Height)
 
-	$font = new-object System.Drawing.Font Consolas,12 
-	$fontPrice = new-object System.Drawing.Font Consolas,24
-	$brushBg = [System.Drawing.SolidBrush]::New([System.Drawing.Color]::FromArgb(100, 0, 0, 0))
+	$fontSize = ([int]($boxHeight/15))
+	$fontSizePrice = ([int]($boxHeight/8))
+	$font = new-object System.Drawing.Font Consolas,$fontSize
+	$fontPrice = new-object System.Drawing.Font Consolas,$fontSizePrice
+	$brushBg = [System.Drawing.SolidBrush]::New([System.Drawing.Color]::FromArgb(105, 0, 0, 0))
 	$brushFg = [System.Drawing.Brushes]::White 
-
-	$graphics.FillRectangle($brushBg,4,36,$newX,160) 
-    $graphics.DrawImage($img, 4, 36+[int]((160-$newY)/2), $newX, $newY)
-	$graphics.FillRectangle($brushBg,0,0,$bmp.Width,50)
 	
-	$tempName = $name
+	
+	$graphics.FillRectangle($brushBg,4,$boxHeight - 4 - $targetImgSize,$newX,$targetImgSize) 
+    $graphics.DrawImage($img, 4, ($boxHeight - 4 - $targetImgSize)+[int](($targetImgSize - $newY)/2), $newX, $newY)
+	$graphics.FillRectangle($brushBg,0,0,$boxWidth,[int]($boxHeight/3))
+	
+	$wordWrapAt = 44*(12/$fontSize)*($boxWidth/400)
+	
+	$tempName = " "+$name
 	$lineNumber = 0
-	while ($tempName.length -gt 42)
+	while ($tempName.length -gt $wordWrapAt)
 	{
-		for ($i = 42; $i -gt 0; $i--)
+		for ($i = $wordWrapAt; $i -gt 0; $i--)
 		{
 			if ($tempName[$i] -eq " ")
 			{
@@ -73,28 +86,28 @@ function goForm
 			}
 			
 		}
-		if ($i -lt 19)
+		if ($i -lt ([int]($wordWrapAt/2)))
 		{
-			$i = 42
+			$i = $wordWrapAt
 		}
-		$newLine = $tempName.substring(0,$i)
+		$newLine = $tempName.substring(1,$i)
 		$tempName = $tempName.substring($i,$tempName.length-$i)
-		$graphics.DrawString($newLine,$font,$brushFg,10,$lineNumber*14) 
+		$graphics.DrawString($newLine,$font,$brushFg,4,$lineNumber*($fontsize+3)) 
 		$lineNumber++
 	}
-	$graphics.DrawString($tempName,$font,$brushFg,10,$lineNumber*14) 
+	$graphics.DrawString($tempName.substring(1),$font,$brushFg,4,$lineNumber*($fontsize+3)) 
 
-	$graphics.DrawString($price,$fontPrice,$brushFg,250,150) 
+	$graphics.DrawString($price,$fontPrice,$brushFg,([int]($boxWidth*5/8)),([int]($boxHeight*3/4))) 
 	
 	$pictureBox = new-object Windows.Forms.PictureBox
 	$pictureBox.Image = $bmp
-	$pictureBox.Width =  400
-	$pictureBox.Height =  200
+	$pictureBox.Width =  $boxWidth
+	$pictureBox.Height =  $boxHeight
 	$form.controls.add($pictureBox)
 	$form.StartPosition = "manual"
 	$form.Location = New-Object System.Drawing.Size($windowX, $windowY)
-	$form.width = 400
-	$form.height = 200
+	$form.width = $boxWidth
+	$form.height = $boxHeight
 	$form.ControlBox = false
 	$form.FormBorderStyle= [System.Windows.Forms.FormBorderStyle]::None
 	$form.controls.Add_MouseDown({
@@ -125,62 +138,65 @@ while ($true)
 		$link = $deal.link
 		$dealTitle = $deal.title.InnerText.ToString()
 		
-		if (! ($checkedDeals -contains $link))
+		if (! ($newDeals -contains $link))
 		{
-			$checkedDeals += $link
+			$newDeals += $link
 			echo $dealTitle
 			echo $price
 			echo $link
 			echo $deal.pubDate
 			echo " "
-			
-			#echo " "
-			$foundMatch = $false
-			foreach ($searchword in $searchwords)
+			echo " "
+		}
+		
+		$foundMatch = $false
+		foreach ($searchword in $searchwords)
+		{
+			if ($dealTitle -like $searchword)
 			{
-				if ($dealTitle -like $searchword)
-				{
-					$foundMatch = $true
-				}
-			}
-			if ($foundMatch)
-			{
-				(New-Object Media.SoundPlayer $sound).Play();
-				$freeFormId = $forms.length
-				for ($i=0;$i -lt $forms.length;$i++)
-				{
-					$form = $forms[$i]
-					if ($form.job.State -ne "Running")
-					{
-						$freeFormId = $i
-						break
-					}
-				}
-				if ($freeFormId -ge $forms.length)
-				{
-					$forms += 0
-				}
-				#$dealTitle
-				$thumbnail = $deal.content.url
-				Remove-Item -Force -ErrorAction Ignore "$env:temp\mydealz$freeFormId.jpg"
-				Invoke-WebRequest $thumbnail -OutFile "$env:temp\mydealz$freeFormId.jpg"
-				#echo $freeFormId
-				$screens = [System.Windows.Forms.Screen]::AllScreens
-				$windowX = $screens[$monitor-1].WorkingArea.Location.X+$posX
-				$windowY = $posY
-				if ($flowDirection -eq "up")
-				{
-					$windowY = [math]::max(0,$windowY - $freeFormId*205)
-				}
-				else
-				{
-					$windowY = [math]::min($screens[$monitor-1].WorkingArea.Height-180,$windowY + $freeFormId*205)
-				}
-				$job = start-job -ArgumentList $dealTitle,$freeFormId,$price,$windowX,$windowY,$link $function:goForm
-				
-				$forms[$freeFormId] = [pscustomobject]@{jobId=$job.Id; title=$dealTitle; job=$job}
+				$foundMatch = $searchword
+				break
 			}
 		}
+		if ($foundMatch -and ($dealtitle -like $foundMatch) -and !($shownDeals -contains $link)) #because i encountered weird false positives
+		{
+			$shownDeals += $link
+			(New-Object Media.SoundPlayer $sound).Play();
+			$freeFormId = $forms.length
+			for ($i=0;$i -lt $forms.length;$i++)
+			{
+				$form = $forms[$i]
+				if ($form.job.State -ne "Running")
+				{
+					$freeFormId = $i
+					break
+				}
+			}
+			if ($freeFormId -ge $forms.length)
+			{
+				$forms += 0
+			}
+			#$dealTitle
+			$thumbnail = $deal.content.url
+			Remove-Item -Force -ErrorAction Ignore "$env:temp\mydealz$freeFormId.jpg"
+			Invoke-WebRequest $thumbnail -OutFile "$env:temp\mydealz$freeFormId.jpg"
+			#echo $freeFormId
+			$screens = [System.Windows.Forms.Screen]::AllScreens
+			$windowX = $screens[$monitor-1].WorkingArea.Location.X+$posX
+			$windowY = $posY
+			if ($flowDirection -eq "up")
+			{
+				$windowY = [math]::max(0,$windowY - $freeFormId*($boxHeight+5))
+			}
+			else
+			{
+				$windowY = [math]::min($screens[$monitor-1].WorkingArea.Height-180,$windowY + $freeFormId*($boxHeight+5))
+			}
+			$job = start-job -ArgumentList $dealTitle,$freeFormId,$price,$windowX,$windowY,$link,$boxWidth,$boxHeight $function:goForm
+			
+			$forms[$freeFormId] = [pscustomobject]@{jobId=$job.Id; title=$dealTitle; job=$job}
+		}
+		
 	}
 	Start-Sleep -Seconds $throttle
 }

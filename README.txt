@@ -22,7 +22,7 @@ you can fine-tune the position by additionally changing the $posX and $posY vari
 the $boxHeight and $boxWidth of the alerts is adjustable too.
 the $flowDirection variable determines whether additional notifications will be shown below or above.
 the $throttle variable determines how long the script will sleep in between checking for new deals
-you can change the $sound to your liking. disabling the sound entirely is not implemented, you'd need to delete line 148 for that.
+you can change the $sound to your liking. disabling the sound entirely is not implemented, you'd need to delete line 195 which includes "(New-Object Media.SoundPlayer $sound).Play();" for that.
 you can also search the vendorName or Description, change those variables to $true if you want this.
 
 ### ADDITIONAL INFO

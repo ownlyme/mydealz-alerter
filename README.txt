@@ -4,10 +4,10 @@ powershell script with custom notifications for mydealz keywords
 ### SCHNELLINSTALLATION
 Öffne die .ps1 datei mit einem Texteditor.
 Bearbeite die $searchwords (Suchbegriffe) sodass sie deinen Präferenzen entsprechen.
-Die Suchbegriffe sollten von sternchen (*) und anführungszeichen (") umschlossen sein und durch kommas getrennt werden, also genau wie es dort schon beispielhaft gezeigt ist.
-Wenn du einen zweiten Bildschirm hast, ändere die variable $monitor auf 2
-Speichere das script und führe es via Rechtsklick -> "Mit Powershell ausführen" aus.
-Wenn ein Deal gefunden wurde, kannst du die Benachrichtigung mit einem linksklick schließen oder mit der mittleren Maustaste direkt auf die Seite des Deals gelangen.
+Die Suchbegriffe sollten von Sternchen (*) und Anführungszeichen (") umschlossen sein und durch kommas getrennt werden, also genau wie es dort schon beispielhaft gezeigt ist.
+Wenn du einen zweiten Bildschirm hast, ändere die Variable $monitor auf 2
+Speichere das Script und führe es via Rechtsklick -> "Mit Powershell ausführen" aus.
+Wenn ein Deal gefunden wurde, kannst du die Benachrichtigung mit einem Linksklick schließen oder mit der mittleren Maustaste direkt auf die Seite des Deals gelangen.
 
 
 

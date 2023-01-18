@@ -20,8 +20,9 @@ also you might need to configure on what screen it will be shown. by default it'
 you can fine-tune the position by additionally changing the $posX and $posY variables.
 the $boxHeight and $boxWidth of the alerts is adjustable too.
 the $flowDirection variable determines whether additional notifications will be shown below or above.
-the $throttle variable determines how long the script will sleep in between queries (no idea if they ban your ip if you query the server too often)
+the $throttle variable determines how long the script will sleep in between checking for new deals
 you can change the $sound to your liking. disabling the sound entirely is not implemented, you'd need to delete line 148 for that.
+you can also search the vendorName or Description, change those variables to $true if you want this.
 
 ### ADDITIONAL INFO
 Any mousclick will dismiss the notification, but a click with the middle button will take you to the deal's homepage

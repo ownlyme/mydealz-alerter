@@ -7,6 +7,7 @@ Bearbeite die $searchwords (Suchbegriffe) sodass sie deinen Präferenzen entspre
 Die Suchbegriffe sollten von sternchen (*) und anführungszeichen (") umschlossen sein und durch kommas getrennt werden, also genau wie es dort schon beispielhaft gezeigt ist.
 Wenn du einen zweiten Bildschirm hast, ändere die variable $monitor auf 2
 Speichere das script und führe es via Rechtsklick -> "Mit Powershell ausführen" aus.
+Wenn ein Deal gefunden wurde, kannst du die Benachrichtigung mit einem linksklick schließen oder mit der mittleren Maustaste direkt auf die Seite des Deals gelangen.
 
 
 

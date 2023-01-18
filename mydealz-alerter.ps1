@@ -1,14 +1,17 @@
 add-type -assemblyName System.Windows.Forms
 add-type -assemblyName System.Drawing
 
-$searchwords = @("*ryzen*","*galaxy tab*", "*mind*", "*amazon*") #not case sensitive
+$searchwords = @("*ryzen*","*sn850x*","*galaxy tab*","*amazon*") #not case sensitive
 
-$monitor = 1 #first screen !!!!!!!!!!
+$monitor = 2 #first screen !!!!!!!!!!
 $posX = 0
 $posY = 780
 $flowDirection = "up" # ("up" | "down")
 $throttle = 61 #seconds
 $sound = "C:\WINDOWS\Media\Windows Notify Calendar.wav"
+
+$searchVendorName = $false
+$searchDescription = $false
 
 $boxWidth = 250
 $boxHeight = 125
@@ -121,7 +124,8 @@ function goForm
 		}
 	})
 	$form.Add_Shown( { $form.Activate() } )
-	$form.ShowDialog()
+	$topmost = New-Object 'System.Windows.Forms.Form' -Property @{TopMost=$true}
+	$form.ShowDialog($topmost)
 }
 
 $forms = @()
@@ -135,6 +139,8 @@ while ($true)
 		#echo $deal.merchant.name.InnerText
 		#echo $deal.merchant.price
 		$price = $deal.merchant.price
+		$vendor = $deal.merchant.name
+		$description = $deal.description.InnerText
 		$link = $deal.link
 		$dealTitle = $deal.title.InnerText.ToString()
 		
@@ -150,15 +156,40 @@ while ($true)
 		}
 		
 		$foundMatch = $false
+		$searchPlace = $dealTitle
 		foreach ($searchword in $searchwords)
 		{
-			if ($dealTitle -like $searchword)
+			if ($searchPlace -like $searchword)
 			{
 				$foundMatch = $searchword
 				break
 			}
 		}
-		if ($foundMatch -and ($dealtitle -like $foundMatch) -and !($shownDeals -contains $link)) #because i encountered weird false positives
+		if (!$foundMatch -and $searchVendorName)
+		{
+			$searchPlace = $vendor
+			foreach ($searchword in $searchwords)
+			{
+				if ($searchPlace -like $searchword)
+				{
+					$foundMatch = $searchword
+					break
+				}
+			}
+		}
+		if (!$foundMatch -and $searchDescription)
+		{
+			$searchPlace = $description
+			foreach ($searchword in $searchwords)
+			{
+				if ($searchPlace -like $searchword)
+				{
+					$foundMatch = $searchword
+					break
+				}
+			}
+		}
+		if ($foundMatch -and ($searchPlace -like $foundMatch) -and !($shownDeals -contains $link)) #because i encountered weird false positives
 		{
 			$shownDeals += $link
 			(New-Object Media.SoundPlayer $sound).Play();

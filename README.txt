@@ -14,9 +14,9 @@ Speichere das script und führe es via Rechtsklick -> "Mit Powershell ausführen
 make sure to set up your searchwords in line 4 of the script
 it's using powershell's "-like" syntax
 basically put your search word in between asterisks (*)
-as an example i've set up the script with 3 searchwords already.
+as an example i've set up the script with 4 searchwords already.
 
-also you might need to configure on what screen it will be shown. by default it's on the first screen.
+also you might need to configure on what $monitor it will be shown. by default it's on the first screen.
 you can fine-tune the position by additionally changing the $posX and $posY variables.
 the $boxHeight and $boxWidth of the alerts is adjustable too.
 the $flowDirection variable determines whether additional notifications will be shown below or above.

@@ -1,7 +1,16 @@
 # mydealz-alerter
 powershell script with custom notifications for mydealz keywords\
 
-### SETUP
+### SCHNELLINSTALLATION
+Öffne die .ps1 datei mit einem Texteditor.\
+Bearbeite die $searchwords (Suchbegriffe) sodass sie deinen Präferenzen entsprechen.\
+Die Suchbegriffe sollten von sternchen (*) und anführungszeichen (") umschlossen sein und durch kommas getrennt werden, also genau wie es dort schon beispielhaft gezeigt ist.\
+Wenn du einen zweiten Bildschirm hast, ändere die variable $monitor auf 2\
+Speichere das script und führe es via Rechtsklick -> "Mit Powershell ausführen" aus.\
+
+
+
+### ADVANCED CONFIGURATION
 make sure to set up your searchwords in line 4 of the script\
 it's using powershell's "-like" syntax\
 basically put your search word in between asterisks (*)\
